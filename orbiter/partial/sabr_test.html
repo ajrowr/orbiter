@@ -1,0 +1,42 @@
+<h1>Sabr</h1>
+
+<div class="row">
+    <div class="col-md-5" id="imgcontainer">
+        <canvas id="c" width="100px" height="100px"></canvas><br/>
+        <img id="iimg" ng-src="{{sabrUrl_}}"><br/>
+        <button type="button" ng-click="getImg()">Copy</button>
+    </div>
+    
+    <div class="col-md-7">
+        <table class="table">
+            <thead>
+                
+            </thead>
+            <tbody>
+                <tr ng-repeat="op in operations">
+                    <td>{{op.key}}</td>
+                    <td><select ng-model="op.name"><option ng-repeat="ot in opNames">{{ot}}</select></td>
+                    <td ng-repeat="opParam in op.params">
+                        <select ng-model="opParam.type"><option ng-repeat="opT in opParamTypes">{{opT}}</select>
+                        <input type="text" size="4" ng-model="opParam.value">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="button" ng-click="addBlankOp()" class="btn btn-md-success">+</button>
+        <button type="button" ng-click="capturePxlData()" class="btn btn-md-success"><span class="glyphicon glyphicon-pushpin"></span></button>
+        <button type="button" ng-click="updateImgUrl()" class="btn btn-md-success">Update</button>
+        
+        <div style="border:1px solid black;">
+            <span>{{click.x}}</span><br/>
+            <span>{{click.y}}</span><br/>
+            <!-- <span ng-bind="click.r"></span><br/>
+            <span ng-bind="click.g"></span><br/>
+            <span ng-bind="click.b"></span><br/>
+            <span ng-bind="click.a"></span><br/> -->
+            <span ng-bind="click.hexval"></span><br/>
+        </div>
+        
+    </div>
+    
+</div>

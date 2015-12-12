@@ -1,0 +1,60 @@
+<h1>My Channels</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        
+        <div>
+            <h2>Add a new channel</h2>
+            <div style="border: 1px solid black; box-shadow: 3px 3px 5px #ccc; padding: 1ex;">
+                <form ng-submit="submitChannelCreateForm($event)">
+                    <table class="table">
+                        <thead>
+                            <th>Name</th>
+                            <th title="A concise description of the channel">Description</th>
+                            <th title="A label that the system will use to identify the channel. Lowercase letters and underscores only, no spaces!">System label</th>
+                            <!-- <th>Site</th> -->
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text" ng-model="channelName"></td>
+                                <td><input type="text" ng-model="channelDescription"></td>
+                                <td><input type="text" ng-model="channelLabel"></td>
+                                <!-- <td><select ng-model="channelSite">
+                                    <option ng-repeat="site in sites" ng-value="site.id">
+                                        {{site.base_address}}
+                                    </option>
+                                </select></td> -->
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button type="submit">Add channel</button>
+                </form>
+            </div>
+        </div>
+        
+        <oi-channel ng-repeat="chan in channels" channel="chan">
+        </oi-channel>
+            <!-- <h2>{{chan.name}}</h2>
+            <div style="border: 1px solid black; box-shadow: 3px 3px 5px #ccc; padding: 1ex;">
+                <span>{{chan.description ? chan.description : 'No description'}}</span><br/>
+                <strong>Site:</strong> <span style="font-family: monospace">{{chan.site_info.base_address}}</span><br/>
+                <strong>System label:</strong> <span style="font-family: monospace">{{chan.system_label}}</span>
+                <div style="min-height: 150px;">
+                    <oi-thumb style="width: 110px; display: inline-block;" ng-style="{'opacity':!o.published ? '0.5' : ''}" ng-repeat="o in chan.presentations" item="{'preview_url':o.detail.preview_url, url: '#/orb/{0}'.format(o.detail.id), text: o.external_id}" ewidth="100" iwidth="80" font="'monospace'">
+                </div>
+
+            </div> -->
+        <!-- </div> -->
+        
+    </div>
+    
+    <div class="col-md-4">
+        <h4>Jump links</h4>
+        <ul>
+            <li ng-repeat="chan in channels"><a href="">{{chan.name}}</a></li>
+        </ul>
+        <h4>Filter channels</h4>
+        <p>Add channel filters here</p>
+    </div>
+    
+</div>

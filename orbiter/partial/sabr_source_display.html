@@ -1,0 +1,127 @@
+
+<h1>Orb source #{{src.id}}</h1>
+
+<div class="row">
+    <div class="col-md-5" id="imgcontainer">
+        <oi-frame-switcher frame-info="frameInfo" frame-switch-fn="switchFrame"></oi-frame-switcher>
+
+        <canvas id="c" width="1" height="1"></canvas><br/>
+    </div>
+    
+    <div class="col-md-7" style="background-color: #ffffff;">
+        
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" ng-class="{'active': false}"><a href="#/source/{{src.id}}">Info</a></li>
+            <li role="presentation" ng-class="{'active': true}"><a ng-click="">Sabr</a></li>
+        </ul>
+        
+        <h2>Operations</h2>
+        
+        <div class="row" ng-repeat="op in operations">
+            <div ng-if="op.tag == 'rotate'">
+                <div class="col-md-3"><h4>Rotate</h4></div>
+                <div class="col-md-1">
+                    <span>{{rotationFactor}}°</span>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-xs btn-default" ng-click="rotate('left')"><span class="glyphicon glyphicon-circle-arrow-left"></span></button>
+                    <button class="btn btn-xs btn-default" ng-click="rotate('right')"><span class="glyphicon glyphicon-circle-arrow-right"></span></button>
+                </div>
+            </div>
+            
+            <div ng-if="op.tag == 'shave'">
+                <div class="col-md-3"><h4>Shave</h4></div>
+                <div class="col-md-3">
+                    Horizontal: <input type="text" style="width: 1.8em;" ng-model="op.shaveX" ng-change="showImg()">%
+                </div>
+                <div class="col-md-2">
+                    Vertical: <input type="text" style="width: 1.8em;" ng-model="op.shaveY" ng-change="showImg()">%
+                </div>
+                <div class="col-md-2">
+                    <sabr-operation-toggle-and-delete op="op" toggle="toggleOp" delete="deleteOp"></sabr-operation-toggle-and-delete>
+                </div>
+            </div>
+
+            <div ng-if="op.tag == 'crop'">
+                <div class="col-md-3"><h4>Crop</h4></div>
+                <div class="col-md-1">
+                    Left:<br/> <input type="text" style="width: 2.5em;" ng-model="op.l" ng-change="showImg()">
+                </div>
+                <div class="col-md-1">
+                    Top:<br/> <input type="text" style="width: 2.5em;" ng-model="op.t" ng-change="showImg()">
+                </div>
+                <div class="col-md-1">
+                    Width:<br/> <input type="text" style="width: 2.5em;" ng-model="op.w" ng-change="showImg()">
+                </div>
+                <div class="col-md-2">
+                    Height:<br/> <input type="text" style="width: 2.5em;" ng-model="op.h" ng-change="showImg()">
+                </div>
+                <div class="col-md-2">
+                    <sabr-operation-toggle-and-delete op="op" toggle="toggleOp" delete="deleteOp"></sabr-operation-toggle-and-delete>
+                </div>
+            </div>
+
+            
+            <div ng-if="op.tag == 'transparent'">
+                <div class="col-md-3"><h4>Transparency</h4></div>
+                <div class="col-md-3">
+                    <sabr-value-adjuster op="op" key="'fuzz'" label="'Fuzz'" delta-plus="1" delta-minus="-1" delta-fn="adjustValue" change-fn="showImg"></sabr-value-adjuster>
+                </div>
+                <div class="col-md-2">
+                    <sabr-colour-picker op="op" setpicker="setPickerTarget"></sabr-colour-picker>
+                </div>
+                <div class="col-md-2">
+                    <sabr-operation-toggle-and-delete op="op" toggle="toggleOp" delete="deleteOp"></sabr-operation-toggle-and-delete>
+                </div>
+            </div>
+            
+            <div ng-if="op.tag == 'flood'">
+                <div class="col-md-3"><h4>Flood</h4></div>
+                <div class="col-md-3">
+                    <sabr-value-adjuster op="op" key="'fuzz'" label="'Fuzz'" delta-plus="1" delta-minus="-1" delta-fn="adjustValue" change-fn="showImg"></sabr-value-adjuster>
+                </div>
+                <div class="col-md-2">
+                    <sabr-colour-picker op="op" setpicker="setPickerTarget"></sabr-colour-picker>
+                </div>
+                <div class="col-md-2">
+                    <sabr-operation-toggle-and-delete op="op" toggle="toggleOp" delete="deleteOp"></sabr-operation-toggle-and-delete>
+                </div>
+            </div>
+            
+            <div ng-if="op.tag == 'trim'">
+                <div class="col-md-3"><h4>Trim</h4></div>
+                <div class="col-md-5"></div>
+                <div class="col-md-2">
+                    <sabr-operation-toggle-and-delete op="op" toggle="toggleOp" delete="deleteOp"></sabr-operation-toggle-and-delete>
+                </div>
+                
+            </div>
+            
+        </div>
+        <div class="row">
+            <br/>
+            
+            <sabr-operation-add-button add-op-fn="addFloodOp" label="'Flood'" help-text="'Flood fill an area'"></sabr-operation-add-button>
+            <sabr-operation-add-button add-op-fn="addTransparencyOp" label="'Transparency'" help-text="'Designate a colour as being transparent'"></sabr-operation-add-button>
+            <!-- <sabr-operation-add-button add-op-fn="addTrimOp" label="'Trim'" help-text="'Auto-removes any transparent area from outside of all frames (warning: occasionally freaky)'"></sabr-operation-add-button> -->
+            <sabr-operation-add-button add-op-fn="addShaveOp" label="'Shave'" help-text="'Removes a percentage from sides and top'"></sabr-operation-add-button>
+            <!-- <sabr-operation-add-button add-op-fn="addCropOp" label="'Crop'" help-text="'Specify area to be retained (warning: not working properly)'"></sabr-operation-add-button> -->
+            
+            <br/>
+            <br/>
+            <button type="button" ng-click="sendToWorkflow()" class="btn btn-success"><span class="glyphicon glyphicon-ok-sign"></span> Commence processing</button>            
+        </div>
+        
+        <div ng-if="statusMessage" class="row">
+            <br/>
+            <div ng-if="statusMessage.url"><a href="{{statusMessage.url}}">{{statusMessage.content}}</a></div>
+            <div ng-if="!statusMessage.url">{{statusMessage.content}}</div>
+            <br/>
+          <div ng-if="statusMessage.processProgressEstimate" class="progress">
+            <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="{{statusMessage.processProgressEstimate}}" aria-valuemin="0" aria-valuemax="100" ng-style="{width: statusMessage.processProgressEstimate + '%'}"><span class="sr-only">{{statusMessage.processProgressEstimate}}% Complete</span></div>
+          </div>
+        </div>
+                
+    </div>
+    
+</div>

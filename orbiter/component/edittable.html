@@ -1,0 +1,38 @@
+<div ng-if="!editableModeMarker && staticObject">
+    <table class="table">
+        <tbody>
+            <tr ng-repeat="f in fields">
+                <td><strong>{{f.title}}:</strong></td>
+                <td ng-bind="staticObject[f.ident]">&emdash;</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div ng-if="editableModeMarker || !staticObject">
+    <form ng-submit="submitFn($event)">
+        <table class="table">
+            <tbody>
+                <tr ng-repeat="f in fields">
+                    <td><strong>{{f.title}}:</strong></td>
+                    <td style="text-align: right;"><input type="text" ng-model="editableObject[f.ident]"></td>
+                </tr>
+                
+                <tr>
+                    <td colspan="2">
+                        <span style="float: right; text-align: right;">
+                            <button ng-if="deleteFn" type="button" style="" class="btn btn-danger" ng-click="deleteFn()">
+                                <span class="glyphicon glyphicon-remove"></span>
+                                {{deleteButtonLabel ? deleteButtonLabel : 'Delete'}} 
+                            </button>
+                            <button style="" class="btn btn-success" type="submit">
+                                <span class="glyphicon glyphicon-ok"></span>
+                                {{submitButtonLabel ? submitButtonLabel : 'Save'}} 
+                            </button>
+                            
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>

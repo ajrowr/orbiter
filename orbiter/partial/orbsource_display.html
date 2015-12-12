@@ -1,0 +1,83 @@
+
+<h1>Orb source #{{src.id}}</h1>
+
+<div class="row">
+    <!-- Image display -->
+    <div class="col-md-5" id="imgcontainer">
+        <oi-frame-switcher frame-info="frameInfo" frame-switch-fn="switchFrame"></oi-frame-switcher>
+        <img ng-src="{{previewUrl}}">
+    </div>
+    
+    
+    <div class="col-md-7">
+        
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" ng-class="{'active': tabState=='info'}"><a ng-click="setTabState('info')">Info</a></li>
+            <li role="presentation" ng-class="{'active': tabState=='sabr'}"><a href="#/sabr/{{src.id}}">Sabr</a></li>
+        </ul>
+
+
+
+        <h2>Details <button type="button" ng-class="{'active': srcEditMarker}" ng-click="toggleEditable()" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-edit"></span></button></h2>
+        <div class="row">
+            
+            <div class="col-md-8">
+                <oi-edittable staticobj="src" editableobj="srcEditable" fields="srcFields" editmarker="srcEditMarker" submitfn="submitSourceUpdateForm" deletefn="deleteSource">
+                </oi-edittable>
+                
+            </div>
+            
+            <div class="col-md-4">
+                <p><strong>Created on</strong> {{ui.dateFmt(src.created_when)}}<br/>
+                    <strong>Source file:</strong> 
+                        <span ng-if="src.sourcedata_size">{{src.sourcedata_size}} mbytes</span>
+                        <strong ng-if="src.sourcedata_size==0" style='color: red;'>File is missing!</strong> <span class="glyphicon glyphicon-info-sign" title="{{src.sourcedata_filename}}"></span><br/>
+                        
+                    <strong>Frame count:</strong> {{src.frame_count}}<br/>
+                    <strong>Frame dimensions: </strong> {{src.frame_width}} &times; {{src.frame_height}}<br/>
+                </p>
+            </div>
+            
+        </div>
+        
+        <div>
+            <h2>Presentations created from this source</h2>
+            <table class="table table-striped">
+                <!-- <colgroup><col></col><col></col><col></col><col></col></colgroup> -->
+                <thead>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Created when</th>
+                    <th>Owner</th>
+                </thead>
+                <tbody>
+                    <tr ng-if="!src.presentations || src.presentations.length==0">
+                        <td colspan="4">No presentations found for this source.</td>
+                    </tr>
+                    <tr ng-repeat="p in src.presentations">
+                        <td><a href="#/orb/{{p.id}}">{{p.id}}</a></td>
+                        <td><a href="#/orb/{{p.id}}">{{p.title}}</a></td>
+                        <td>{{ui.dateFmt(p.created_when)}}</td>
+                        <td>{{p.owner}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div>
+            <h2>Make a presentation from this source</h2>
+            
+            <oi-edittable staticobj="null" editableobj="newOrb" fields="newOrbFields" editmarker="true" submitfn="submitNewOrb" submitlabel="'Add'"></oi-edittable>
+            
+                
+        </div>
+        
+        <div>
+            <a href="#/sabr/{{src.id}}">View in Sabr</a>
+        </div>
+
+
+
+    </div>
+
+</div>

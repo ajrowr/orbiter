@@ -1,0 +1,79 @@
+<h1>{{orb.title}}</h1>
+
+
+<div class="row"> 
+    <div class="col-md-4">
+        <img ng-attr-id="{{elemIdent}}" ng-src="{{orb.preview_url}}" style="width: 300px;" data-orbimg-orb-id="{{orb.id}}" />
+    </div>
+    
+    <div class="col-md-8">
+        <h2>Info <button type="button" ng-class="{'active': infoEditEnabled}" ng-click="toggleEditable()" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-edit"></span></button></h2>
+        <div class="row">
+            <div class="col-md-8">
+                <oi-edittable staticobj="orb" editableobj="orbEditable" fields="orbFields" editmarker="infoEditEnabled" submitfn="editOrb" deletefn="deleteOrb">
+            </div>
+            <div class="col-md-4">
+                <strong>Created:</strong> {{ui.dateFmt(orb.created_when)}}<br/>
+                <strong>Source:</strong> <a href="#/source/{{orb.source}}">#{{orb.source}}</a><br/>
+                <strong>Frame count:</strong> {{orb.frame_count}}<br/>
+                <strong>Frame dimensions:</strong> &zeta;{{orb.width}} &times; &zeta;{{orb.height}}<br/>
+                <strong>Owner:</strong> {{orb.owner}}<br/>
+            </div>
+        </div>
+        
+        <!-- <div>
+            <h2>Plugins</h2>
+            <p>Plugin stuff goes here</p>
+        </div>
+
+        <div>
+            <h2>Points of interest</h2>
+            <p>POI stuff goes here</p>
+        </div> -->
+
+        
+        <div>
+            <h2>Channels</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th><span class="glyphicon glyphicon-ok"></span></th>
+                        <th>Name</th>
+                        <th>Channel label</th>
+                        <th>Item ident</th>
+                        <th>Published?</th>
+                        <th>Item&nbsp;Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="channel in channels">
+                        <td><span ng-class="{'glyphicon': true, 'glyphicon-ok':myBinding(channel)}"></span></td>
+                        <td><a href="#channel/{{channel.system_label}}">{{channel.name}}</a></td>
+                        <td><span style="font-family: monospace">{{channel.system_label}}</span></td>
+                        <td>
+                            <span ng-if="!myBinding(channel)"><input style="font-family: monospace" ng-model="channelIdents[channel.id]" type="text"></span>
+                            <span style="font-family: monospace">{{myBinding(channel).external_id}}</span>
+                        </td>
+                        <td><span ng-if="myBinding(channel)" ng-class="{'glyphicon': true, 'glyphicon-ok':myBinding(channel).published, 'glyphicon-remove':!myBinding(channel).published}"></span></td>
+                        <td>
+                            <button title="Attach orb to channel" ng-click="attachOrbToChannel(channel.id)" ng-if="!myBinding(channel)"><span ng-class="'glyphicon glyphicon-plus'"></span></button>
+                            <button title="Detach orb from channel" ng-click="detachOrbFromChannel(myBinding(channel).id)" ng-if="myBinding(channel)"><span ng-class="'glyphicon glyphicon-minus'"></span></button>
+                            <span ng-if="myBinding(channel)">
+                                <button title="Publish orb to channel" ng-click="publishOrb(myBinding(channel).id)" ng-if="!myBinding(channel).published"><span ng-class="'glyphicon glyphicon-volume-up'"></span></button>
+                                <button title="Unpublish orb from channel" ng-click="withdrawOrb(myBinding(channel).id)" ng-if="myBinding(channel).published"><span ng-class="'glyphicon glyphicon-volume-off'"></span></button>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div>
+                <form ng-submit="deleteOrb($event)">
+                    <button type="submit" class="btn btn-sm btn-danger">Delete presentation</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    
+</div>

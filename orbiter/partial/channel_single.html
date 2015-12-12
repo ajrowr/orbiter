@@ -1,0 +1,12 @@
+<div>
+    <h2>{{channel.name}}</h2>
+    <div style="border: 1px solid black; box-shadow: 3px 3px 5px #ccc; padding: 1ex;">
+        <span>{{channel.description ? channel.description : 'No description'}}</span><br/>
+        <strong>Site:</strong> <span style="font-family: monospace">{{channel.site_info.base_address}}</span><br/>
+        <strong>System label:</strong> <span style="font-family: monospace">{{channel.system_label}}</span>
+        <div style="min-height: 150px;">
+            <oi-thumb style="width: 110px; display: inline-block;" ng-style="{'opacity':!o.published ? '0.5' : ''}" ng-repeat="o in channel.presentations" item="{'preview_url':o.detail.preview_url, url: '#/orb/{0}'.format(o.detail.id), text: o.external_id}" ewidth="100" iwidth="80" font="'monospace'"></oi-thumb>
+        </div>
+    
+    </div>
+</div>
