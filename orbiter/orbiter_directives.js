@@ -54,8 +54,8 @@ var FrameSwitcherDirective = function () {
 }
 
 
-var OrbimgAppDirectives = angular.module('OrbimgAppDirectives', []);
-OrbimgAppDirectives
+var OrbiterDirectives = angular.module('OrbiterDirectives', []);
+OrbiterDirectives
     .directive('oiThumb', ThumbSingleDirective)
     .directive('oiChannel', ChannelSingleDirective)
     .directive('oiEdittable', EditTableDirective)

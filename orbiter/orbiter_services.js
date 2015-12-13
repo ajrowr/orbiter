@@ -143,7 +143,7 @@ var OiUiFactory = function () {
     }
 }
 
-OrbimgAppServices = angular.module('OrbimgAppServices', [])
+OrbiterServices = angular.module('OrbiterServices', [])
     .factory('Oi', OiServiceFactory)
     .factory('OiA', OiAuthenticatedServiceFactory)
     .factory('OiUi', OiUiFactory)

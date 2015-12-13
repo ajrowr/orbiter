@@ -358,7 +358,7 @@ var ChannelListController = function ($scope, Oi, OiA) {
     })
 }
 
-var OrbimgApp = angular.module('OrbimgApp', ['ngRoute', 'OrbimgAppServices', 'OrbimgAppDirectives', 'Sabr'])
+var OrbiterApp = angular.module('OrbiterApp', ['ngRoute', 'OrbiterServices', 'OrbiterDirectives', 'OrbiterControllers', 'Sabr'])
 .controller('MainNavController', MainNavController)
 .controller('DashboardController', DashboardController)
 .controller('OrbDisplayController', OrbDisplayController)
@@ -386,7 +386,7 @@ var OrbimgApp = angular.module('OrbimgApp', ['ngRoute', 'OrbimgAppServices', 'Or
 });
 ;
 
-OrbimgApp
+OrbiterApp
 .config(function ($routeProvider, $locationProvider) {
     $routeProvider
     .when('/dashboard', {
