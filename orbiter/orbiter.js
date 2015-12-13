@@ -197,17 +197,104 @@ var OrbDisplayController = function ($scope, $routeParams, Oi, OiA, OiUtil, $rou
     
 }
 
-var OrbSourceListController = function ($scope, Oi, OiUi) {
-    Oi.getOrbSourceList().success(function (data, status, headers) {
-        $scope.sources = [];
-        var xf = function (s) {
-            s.url = '#source/{0}'.format(s.id);
-            s.title = 'Source #{0}'.format(s.id);
-            s.text = OiUi.dateFmt(s.created_when);
-            return s;
+var OrbSourceListController = function ($scope, Oi, OiUi, $http, $route) {
+    
+    function refreshSourceList() {
+        Oi.getOrbSourceList().success(function (data, status, headers) {
+            $scope.sources = [];
+            var xf = function (s) {
+                s.url = '#source/{0}'.format(s.id);
+                s.title = 'Source #{0}'.format(s.id);
+                s.text = OiUi.dateFmt(s.created_when);
+                return s;
+            }
+            for (var i=0; i<data.length; i++) $scope.sources.push(xf(data[i]));
+        })        
+    };
+    
+    refreshSourceList();
+    
+    function initUploader() {
+        function getUploadIdent() {
+            return {upload_ident:$scope.uploadIdent};
         }
-        for (var i=0; i<data.length; i++) $scope.sources.push(xf(data[i]));
-    })
+        $scope.uploadIdent = String(Date.now()) + String(Math.random());
+        $scope.progressValue = 0;
+        $scope.uploadInProgress = false;
+        var r = new Resumable({target:'/barefile_post/', testChunks:false, chunkSize:1024*512, query:getUploadIdent});
+        var e1 = document.getElementById('uploadBrowse');
+        var e2 = document.getElementById('uploadDrop');
+
+        r.assignBrowse(e1);
+        r.assignDrop(e2);
+        console.log('browse assigned to '+e1);
+        console.log('drop assigned to '+e2);
+
+        r.on('fileSuccess', function(file){
+            console.log(':file successful');
+        });
+        r.on('fileProgress', function(file){
+            console.log(':file progress');
+        });
+        r.on('fileAdded', function(file, event){
+            console.log(':file added');
+        });
+        r.on('filesAdded', function(array){
+            console.log(':files added');
+            console.debug(array);
+            r.upload();
+        });
+        r.on('fileRetry', function(file){
+            console.log('hello5');
+        });
+        r.on('fileError', function(file, message){
+            console.log('hello6');
+        });
+        r.on('uploadStart', function(){
+            console.log(':upload started');
+            $scope.uploadInProgress = true;
+            $scope.uploadStatus = 'Starting...';
+        });
+        r.on('complete', function(){
+            console.log(':transfer complete');
+            $scope.uploadStatus = 'Post-processing...';
+            $http.get('/barefile_finish/?upload_ident=' + $scope.uploadIdent).success(function (data, status, headers) {
+                $scope.uploadStatus = 'Finished!';
+                $scope.progressValue = 100;
+                // refreshSourceList();
+                // delete r;
+                // initUploader();
+                $route.reload();
+            });
+        
+        });
+        r.on('progress', function(){
+            var progr = r.progress();
+            var progrstr = 'Upload is ' + Math.round(String(progr*100)) + '% complete';
+            $scope.$apply(function () {
+                $scope.progressValue = Math.round(String(progr*90));
+                $scope.uploadStatus = 'Uploading... ' + $scope.progressValue + '% complete';
+            })
+            console.log(progrstr);
+        });
+        r.on('error', function(message, file){
+            console.log('hello10');
+        });
+        r.on('pause', function(){
+            console.log('hello11');
+        });
+        r.on('cancel', function(){
+            console.log('hello12');
+        });
+
+
+    }
+    
+    initUploader();
+
+
+
+    
 }
 
 var OrbSourceDisplayController = function ($scope, $routeParams, Oi, OiUtil, OiA, $location) {

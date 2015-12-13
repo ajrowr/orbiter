@@ -1,5 +1,21 @@
+
 <h1>Orb Sources</h1>
 
+<div>
+    <h3>Add a source</h3>
+    <div style="width: 350px; background-color: #eee; cursor: copy; border: 1px solid black; border-radius: 5px; padding: 1.5ex;" id="uploadDrop">
+        <input type="hidden" value="" ng-model="uploadIdent">
+        <p ng-show="!uploadInProgress" style="font-size: 150%; text-decoration: underline; ">To create a source, drag and drop the image files here.</p>
+        <div ng-if="uploadInProgress">
+            <div style="background-color: #7f7; margin: 0px; height: 20px;" ng-style="{width:progressValue + '%'}"></div>
+            <div style="text-decoration: none;">{{uploadStatus}}</div>
+        </div>
+    </div>
+    <p ng-show="!uploadInProgress">Or browse for files by clicking this button: <button id="uploadBrowse" type="button">Browse</button>
+</p>
+</div>
+
+<h3>Available sources</h3>
 <div class="isogrid">
     
     <oi-thumb class="isogrid-item" style="float: left;" ng-repeat="src in sources" item="src" ewidth="140" iwidth="120" iheight="130"></oi-thumb>
