@@ -20,6 +20,15 @@ var OiUtilFactory = function () {
 
 
 var OiAuthenticatedServiceFactory = function ($http, $rootScope, $location) {
+    
+    /* Provided as a service for 3rd-party code that needs to authenticate, eg. Resumable.js */
+    function getRequestHeaders() {
+        return {
+            'Authorization': 'Token {0}'.format($rootScope.user.authKey),
+            'X-CSRFToken': $rootScope.csrfToken
+        }
+    }
+    
     var cfg = function () {
         if (!$rootScope.user) $location.path = '/login';
         return {
@@ -89,6 +98,7 @@ var OiAuthenticatedServiceFactory = function ($http, $rootScope, $location) {
             $rootScope.user = null;
             window.localStorage.clear('user'); /* TODO make this available to the service eg in initSession */
         },
+        getRequestHeaders: getRequestHeaders,
         get: function (uri) {
             return $http.get(ORBSERV(uri), cfg());
         },

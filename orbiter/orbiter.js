@@ -197,7 +197,7 @@ var OrbDisplayController = function ($scope, $routeParams, Oi, OiA, OiUtil, $rou
     
 }
 
-var OrbSourceListController = function ($scope, Oi, OiUi, $http, $route) {
+var OrbSourceListController = function ($scope, Oi, OiUi, OiA, $http, $route) {
     
     function refreshSourceList() {
         Oi.getOrbSourceList().success(function (data, status, headers) {
@@ -215,13 +215,16 @@ var OrbSourceListController = function ($scope, Oi, OiUi, $http, $route) {
     refreshSourceList();
     
     function initUploader() {
-        function getUploadIdent() {
-            return {upload_ident:$scope.uploadIdent};
+        function getPostArgs() {
+            return {
+                upload_ident:$scope.uploadIdent
+            };
         }
         $scope.uploadIdent = String(Date.now()) + String(Math.random());
         $scope.progressValue = 0;
         $scope.uploadInProgress = false;
-        var r = new Resumable({target:'/barefile_post/', testChunks:false, chunkSize:1024*512, query:getUploadIdent});
+        var trg = '/api/orbsources/cluster_chunk_upload/';
+        var r = new Resumable({target:trg, testChunks:false, chunkSize:512*512, query:getPostArgs, headers:OiA.getRequestHeaders});
         var e1 = document.getElementById('uploadBrowse');
         var e2 = document.getElementById('uploadDrop');
 
@@ -258,7 +261,8 @@ var OrbSourceListController = function ($scope, Oi, OiUi, $http, $route) {
         r.on('complete', function(){
             console.log(':transfer complete');
             $scope.uploadStatus = 'Post-processing...';
-            $http.get('/barefile_finish/?upload_ident=' + $scope.uploadIdent).success(function (data, status, headers) {
+            var trg = 'api/orbsources/cluster_upload_conclude/?upload_ident=' + $scope.uploadIdent;
+            OiA.get(trg).success(function (data, status, headers) {
                 $scope.uploadStatus = 'Finished!';
                 $scope.progressValue = 100;
                 // refreshSourceList();
