@@ -32,10 +32,7 @@ var OiAuthenticatedServiceFactory = function ($http, $rootScope, $location) {
     var cfg = function () {
         if (!$rootScope.user) $location.path = '/login';
         return {
-            headers: {
-                'Authorization': 'Token {0}'.format($rootScope.user.authKey),
-                'X-CSRFToken': $rootScope.csrfToken
-            }
+            headers: getRequestHeaders()
         }
     }
     var tplus = function (delta) {
@@ -46,8 +43,6 @@ var OiAuthenticatedServiceFactory = function ($http, $rootScope, $location) {
             if (delta.minutes) s += delta.minutes * 60;
             if (delta.seconds) s += delta.seconds;
         }
-        console.log(delta)
-        console.log(s)
         return Date.now()/1000 + s;
     }
     return {
