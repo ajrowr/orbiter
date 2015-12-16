@@ -4,8 +4,9 @@
 <div class="row">
     <!-- Image display -->
     <div class="col-md-5" id="imgcontainer">
-        <oi-frame-switcher frame-info="frameInfo" frame-switch-fn="switchFrame"></oi-frame-switcher>
-        <img ng-src="{{previewUrl}}">
+        <!-- <oi-frame-switcher frame-info="frameInfo" frame-switch-fn="switchFrame"></oi-frame-switcher> -->
+        <!-- <div>{{frameInfo.frameCount}} frames ({{frameInfo.width}} &times; {{frameInfo.height}})</div> -->
+        <img ng-src="{{previewUrl}}" id="previewimg">
     </div>
     
     
@@ -72,10 +73,6 @@
                 
         </div>
         
-        <div>
-            <a href="#/sabr/{{src.id}}">View in Sabr</a>
-        </div>
-
 
 
     </div>

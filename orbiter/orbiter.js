@@ -322,6 +322,9 @@ var OrbSourceDisplayController = function ($scope, $routeParams, Oi, OiUtil, OiA
             $scope.frameInfo.height = data.frame_height;
             $scope.frameInfo.frameCount = data.frame_count;
             $scope.showPreviewFrame(0);
+            window.setTimeout(function () {
+                $scope.showPreviewOrb();
+            }, 2000);
         });
     }
     
@@ -330,6 +333,15 @@ var OrbSourceDisplayController = function ($scope, $routeParams, Oi, OiUtil, OiA
         if (frame) $scope.frameInfo.currentIdx = frame;
         var w = Math.round(document.getElementById('imgcontainer').clientWidth * 0.9);
         $scope.previewUrl = ORBSERV('src/{0}/preview/{1}/?w={2}'.format($scope.src.id, $scope.frameInfo.currentIdx, w));
+    }
+    
+    $scope.showPreviewOrb = function () {
+        targetid = 'previewimg';
+        var w = Math.round(document.getElementById(targetid).clientWidth * 0.9);
+        var h = Math.round(document.getElementById(targetid).clientHeight * 0.9);
+        var content_url = ORBSERV('src/{0}/strip/{1}w/{2}h/'.format($scope.src.id, w, h));
+        __orbimg.replaceElement(targetid, content_url, w, h, $scope.frameInfo.frameCount, '');
+        
     }
     
     $scope.switchFrame = function (delta) {
