@@ -328,19 +328,26 @@ var OrbSourceDisplayController = function ($scope, $routeParams, Oi, OiUtil, OiA
         });
     }
     
-    $scope.previewUrl = null;
+    $scope.preview = {
+        dimensions: {
+            w: Math.round(document.getElementById('imgcontainer').clientWidth * 0.9),
+            h: null
+        },
+        url: null
+    }
+    
     $scope.showPreviewFrame = function (frame) {
         if (frame) $scope.frameInfo.currentIdx = frame;
-        var w = Math.round(document.getElementById('imgcontainer').clientWidth * 0.9);
-        $scope.previewUrl = ORBSERV('src/{0}/preview/{1}/?w={2}'.format($scope.src.id, $scope.frameInfo.currentIdx, w));
+        $scope.preview.url = ORBSERV('src/{0}/preview/{1}/?w={2}'.format($scope.src.id, $scope.frameInfo.currentIdx, $scope.preview.dimensions.w));
     }
     
     $scope.showPreviewOrb = function () {
         targetid = 'previewimg';
-        var w = Math.round(document.getElementById(targetid).clientWidth * 0.9);
-        var h = Math.round(document.getElementById(targetid).clientHeight * 0.9);
-        var content_url = ORBSERV('src/{0}/strip/{1}w/{2}h/'.format($scope.src.id, w, h));
-        __orbimg.replaceElement(targetid, content_url, w, h, $scope.frameInfo.frameCount, '');
+        var dims = $scope.preview.dimensions;
+        dims.w = document.getElementById('previewimg').clientWidth;
+        dims.h = document.getElementById('previewimg').clientHeight;
+        var content_url = ORBSERV('src/{0}/strip/{1}w/{2}h/'.format($scope.src.id, dims.w, dims.h));
+        __orbimg.replaceElement(targetid, content_url, dims.w, dims.h, $scope.frameInfo.frameCount, '');
         
     }
     

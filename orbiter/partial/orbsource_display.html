@@ -6,7 +6,7 @@
     <div class="col-md-5" id="imgcontainer">
         <!-- <oi-frame-switcher frame-info="frameInfo" frame-switch-fn="switchFrame"></oi-frame-switcher> -->
         <!-- <div>{{frameInfo.frameCount}} frames ({{frameInfo.width}} &times; {{frameInfo.height}})</div> -->
-        <img ng-src="{{previewUrl}}" id="previewimg">
+        <img ng-src="{{preview.url}}" id="previewimg" ng-style="{'width':preview.dimensions.w+'px', 'height':preview.dimensions.h+'px'}">
     </div>
     
     
